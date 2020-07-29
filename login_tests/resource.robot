@@ -5,7 +5,7 @@ Library           SeleniumLibrary
 
 *** Variables ***
 ${SERVER}         https://clarity.dexcom.com/
-${BROWSER}        Chrome
+${BROWSER}        firefox
 ${DELAY}          0
 ${VALID USER}     nilepatest001
 ${VALID PASSWORD}    Password@1
