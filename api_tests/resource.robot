@@ -1,57 +1,29 @@
+
+import requests
 *** Settings ***
 Documentation     Robot Keywords
 
 Library           SeleniumLibrary
 
 *** Variables ***
-${SERVER}         https://clarity.dexcom.com/
-${BROWSER}        Chrome
-${DELAY}          0
-${VALID USER}     nilepatest001
-${VALID PASSWORD}    Password@1
-${LOGIN URL}      ${SERVER}
-${WELCOME URL}    ${SERVER}
-${ERROR URL}      ${SERVER}/error.html
+${headers}      'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N3ZWV0c3BvdGRpYWJldGVzLmNvbSIsInN1YiI6IlN3ZWV0c3BvdCIsImlhdCI6MTU5NjAwMDIyNSwiY29uc2VudFBlcm1pc3Npb24iOiJsaW5rZWRTdWJqZWN0cyIsImRleGNvbUlkIjoiMDliMzY1OGMtYjMwMi00MTZlLTg0NmQtMzlkODg2ZDMzNDc1IiwiZXhwIjoxNTk2MDg2NjI1LCJyb2xlIjoiT3duZXIiLCJzdWJqZWN0SWQiOiIxNTY3NjA0MDAxNDczNDQxNzkyIn0.B0ULSsQLWAf4fOJG4OQNl2Swd-O8R5DngiDQyV5X_UMLw3LavBOCVrHo9oNT_ju-sP2mQbeZS3bcUDpBJ6lCV9ShRVQXLvOnuf1eQHx_fYS4tVw3ZZe-M0YVODrjIRXLbiD9pdAhERIfkiIsSHhn7SGCxPmV7-LrxNo5dxuPDn77keMD6PoS0e0ckIby65pykD_gZZlOEIhyLkdry1uMJbE9k-aID0pzOpUqYoWbsTYVpXre77r4BdxrPyAsbuDB1tCEXfDOrQzDMr-MEVQjt4GZnanZXo0ZKm9pCirq7SiypERD2HFoqxoj7CrFJPcnByQUXded-VicXZ2Qs0Qfqg'
+${url}             "https://clarity.dexcom.com/api/subject/1567604001473441792/analysis_session"
+
+*** Test Cases ***
+
+
 
 *** Keywords ***
-Open login page
-    Open Browser    ${SERVER}    ${BROWSER}
-    Maximize Browser Window
-    Set Selenium Speed    ${DELAY}
+url = ${url}
 
-Open home_users page
-    Click Button  xpath:/html/body/div[1]/div[1]/div/div[2]/div/nav/ul/li[1]/div/a
+payload = {}
+headers = ${headers}
 
+response = requests.request("POST", url, headers=headers, data = payload)
 
-Input Username
-    [Arguments]    ${username}
-    Input Text    username    ${username}
-
-Input Password
-    [Arguments]    ${password}
-    Input Text    password    ${password}
-
-Submit Credentials
-    Click Button  xpath:/html/body/div/div/div/div/form/div[3]/div/input
-
-
-Get response
-    [Arguments]  ${parameters}
-    # creating the session
-    create session  my_api_test_session  {SERVER}/api/subject/1594950620847472640/analysis_session
-
-    # make the call (and capture the response in a variable)
-    ${response} =  get request  my_api_test_session  ${parameters}
-
-    # check the response status
-    should be equal as strings  ${response.status_code}  200
-    [Return]   ${response}
+print(response.text.encode('utf8'))
 
 Check analysisSessionId
-    # call get response keyword
-    ${response} =  Get response analysisSessionId
+    # Assert
+	Should not be equal as strings    ${response.analysisSessionId}    None
 
-    # check the response body
-    ${json} =  set variable  ${response.json()}
-    should not be equal as strings  ${json['analysisSessionId']}  None
-    log  ${json}

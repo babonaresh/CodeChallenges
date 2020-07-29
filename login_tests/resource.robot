@@ -18,9 +18,7 @@ Open login page
     Open Browser    ${SERVER}    ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed    ${DELAY}
-
-Open home_users page
-    Click Button  xpath:/html/body/div[1]/div[1]/div/div[2]/div/nav/ul/li[1]/div/a
+    click link  link:Dexcom CLARITY for Home Users
 
 
 Input Username
@@ -32,9 +30,5 @@ Input Password
     Input Text    password    ${password}
 
 Submit Credentials
-    Click Button  xpath:/html/body/div/div/div/div/form/div[3]/div/input
-
-Welcome Page Should Be Open
-    Location Should Be    ${WELCOME URL}
-    Title Should Be    DEXCOM
+    Click Button  xpath://*[@id="edit-actions"]/input
 
